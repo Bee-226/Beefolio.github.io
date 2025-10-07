@@ -111,60 +111,69 @@
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r161/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.161.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- Three.js Core (version récente) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r168/three.min.js"></script>
+    <!-- OrbitControls via package dédié (fix pour global script) -->
+    <script src="https://cdn.jsdelivr.net/npm/three-orbitcontrols@2.110.3/OrbitControls.js"></script>
     
     <script>
-        // Scène basique Three.js (améliorée pro)
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000011); // Fond bleu nuit pour pro look
+        console.log('Three.js loading...'); // Debug: Check console
         
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true }); // Antialias pour smooth
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true; // Ombres activées
-        document.body.appendChild(renderer.domElement);
-
-        // Cube amélioré (texture wireframe + lumière)
-        const geometry = new THREE.BoxGeometry(2, 2, 2);
-        const material = new THREE.MeshLambertMaterial({ color: 0x00ff88, wireframe: true }); // Vert tech
-        const cube = new THREE.Mesh(geometry, material);
-        cube.castShadow = true;
-        scene.add(cube);
-
-        // Lumière directionnelle pour réalisme
-        const light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(5, 5, 5);
-        light.castShadow = true;
-        scene.add(light);
-
-        // Lumière ambiante pour éviter les zones sombres
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
-        scene.add(ambientLight);
-
-        camera.position.z = 5;
-
-        // Contrôles Orbit (pro : damping pour fluidité)
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // Smooth movement
-        controls.dampingFactor = 0.05;
-
-        // Animation (rotation + update controls)
-        function animate() {
-            requestAnimationFrame(animate);
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Responsive (mise à jour overlay aussi)
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
+        try {
+            // Scène basique Three.js (améliorée pro)
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x001122); // Bleu nuit visible pour debug
+            
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+
+            // Cube amélioré
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+            const material = new THREE.MeshLambertMaterial({ color: 0x00ff88, wireframe: true });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.castShadow = true;
+            scene.add(cube);
+
+            // Lumières
+            const light = new THREE.DirectionalLight(0xffffff, 1);
+            light.position.set(5, 5, 5);
+            light.castShadow = true;
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.6); // Plus fort pour visibilité
+            scene.add(ambientLight);
+
+            camera.position.z = 5;
+
+            // Contrôles (maintenant ça charge !)
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+
+            console.log('Scene ready, cube added'); // Debug success
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Responsive
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        } catch (error) {
+            console.error('Error in Three.js setup:', error); // Catch erreurs
+        }
     </script>
 </body>
 </html>
