@@ -29,7 +29,11 @@
             position: relative;
             overflow: hidden;
         }
-        #hero canvas { display: block; width: 100%; height: 100%; }
+        #hero canvas { 
+            display: block; 
+            width: 100%; 
+            height: 100%; 
+        }
         
         /* Overlay textes sur hero */
         .overlay {
@@ -120,11 +124,16 @@
             background: rgba(255, 255, 255, 0.05);
             position: relative;
         }
-        .stella-flocon-canvas {
+        #floconContainer {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+        }
+        #floconContainer canvas {
             display: block;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
         }
         h1, h2 { margin: 0 0 10px; font-size: 1.5em; }
         ul { margin: 0; padding-left: 20px; font-size: 0.9em; text-align: left; }
@@ -177,9 +186,6 @@
                 <p><a href="mailto:bryan@example.com">Contact</a></p>
             </div>
         </div>
-        
-        <!-- Canvas pour cube (dans hero) -->
-        <canvas id="mainCanvas"></canvas>
     </section>
 
     <!-- Section Projects avec carte Stella -->
@@ -214,9 +220,9 @@
                 <p><a href="#demo">Démo Live</a> | <a href="#code">Voir le Code</a></p>
             </div>
             
-            <!-- Conteneur pour le flocon 3D -->
+            <!-- Conteneur pour le flocon 3D (div au lieu de canvas) -->
             <div class="stella-flocon-container">
-                <canvas class="stella-flocon-canvas" id="floconCanvas"></canvas>
+                <div id="floconContainer" class="stella-flocon-canvas"></div>
             </div>
         </div>
     </section>
@@ -225,15 +231,16 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // Scène principale (cube dans hero)
-        const mainCanvas = document.getElementById('mainCanvas');
+        // Scène principale (cube dans hero) - Fix nesting
+        const hero = document.getElementById('hero');
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x001122);
+        scene.background = new THREE.Color(0x001122); // Bleu nuit visible
         
-        const camera = new THREE.PerspectiveCamera(75, mainCanvas.clientWidth / mainCanvas.clientHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, hero.clientWidth / hero.clientHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(mainCanvas.clientWidth, mainCanvas.clientHeight);
-        mainCanvas.appendChild(renderer.domElement);
+        renderer.setSize(hero.clientWidth, hero.clientHeight);
+        renderer.shadowMap.enabled = true;
+        hero.appendChild(renderer.domElement); // Append direct à #hero
 
         // Cube
         const geometry = new THREE.BoxGeometry(2, 2, 2);
@@ -268,22 +275,22 @@
 
         // Resize pour main
         window.addEventListener('resize', () => {
-            const width = mainCanvas.clientWidth;
-            const height = mainCanvas.clientHeight;
+            const width = hero.clientWidth;
+            const height = hero.clientHeight;
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height);
         });
 
-        // Scène flocon (fixes visibilité)
-        const floconCanvas = document.getElementById('floconCanvas');
+        // Scène flocon (fixes nesting + visibilité)
+        const floconContainer = document.getElementById('floconContainer');
         const floconScene = new THREE.Scene();
         floconScene.background = new THREE.Color(0x00000000);
 
-        const floconCamera = new THREE.PerspectiveCamera(75, floconCanvas.clientWidth / floconCanvas.clientHeight, 0.1, 1000);
+        const floconCamera = new THREE.PerspectiveCamera(75, floconContainer.clientWidth / floconContainer.clientHeight, 0.1, 1000);
         const floconRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
-        floconCanvas.appendChild(floconRenderer.domElement);
+        floconRenderer.setSize(floconContainer.clientWidth, floconContainer.clientHeight);
+        floconContainer.appendChild(floconRenderer.domElement); // Append direct à div
 
         // Flocon (solide pour visibilité, gros comme cube)
         const floconGeometry = new THREE.TorusGeometry(2, 0.6, 8, 32);
@@ -314,17 +321,15 @@
         }
         animateFlocon();
 
-        // Resize flocon (fixé, sans if foireux)
-        function resizeFlocon() {
-            const width = floconCanvas.clientWidth * window.devicePixelRatio;
-            const height = floconCanvas.clientHeight * window.devicePixelRatio;
-            floconCamera.aspect = floconCanvas.clientWidth / floconCanvas.clientHeight;
+        // Resize flocon
+        window.addEventListener('resize', () => {
+            const width = floconContainer.clientWidth;
+            const height = floconContainer.clientHeight;
+            floconCamera.aspect = width / height;
             floconCamera.updateProjectionMatrix();
-            floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
-            floconRenderer.setPixelRatio(window.devicePixelRatio);
-        }
-        window.addEventListener('resize', resizeFlocon);
-        resizeFlocon(); // Init immédiate
+            floconRenderer.setSize(width, height);
+            floconRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Netteté sans lag
+        });
     </script>
 </body>
 </html>
