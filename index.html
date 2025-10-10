@@ -16,14 +16,22 @@
     <style>
         body { 
             margin: 0; 
-            overflow: hidden; 
+            overflow-y: auto; /* Scroll vertical activé */
             background: #000; 
             font-family: 'Arial', sans-serif;
             color: #fff;
+            height: 200vh; /* Hauteur totale pour scroll (ajuste si besoin) */
         }
-        canvas { display: block; }
         
-        /* Overlay pour le texte général */
+        /* Section hero pour la 3D principale */
+        #hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        #hero canvas { display: block; width: 100%; height: 100%; }
+        
+        /* Overlay textes sur hero */
         .overlay {
             position: absolute;
             top: 0;
@@ -72,22 +80,26 @@
             max-width: 200px;
         }
         
-        /* Carte Stella repositionnée en bas */
+        /* Section projects pour la carte (scrollable) */
+        #projects {
+            height: 100vh;
+            padding: 50px 20px;
+            background: linear-gradient(to bottom, #000, #001122); /* Transition douce */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Carte Stella dans le flux */
         .stella-card {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
             width: 90%;
             max-width: 900px;
-            height: 40%; /* Plus haute pour contenu, mais en bas */
-            background: rgba(0, 0, 20, 0.85); /* Bleu nuit semi-transparent */
+            height: 80%;
+            background: rgba(0, 0, 20, 0.85);
             border: 2px solid #00ff88;
-            border-radius: 20px 20px 0 0; /* Arrondi sauf bas */
+            border-radius: 20px;
             padding: 30px;
             overflow-y: auto;
-            pointer-events: auto; /* Permet interactions sur la carte */
-            z-index: 20;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -101,11 +113,12 @@
             width: 100%;
         }
         .stella-flocon-container {
-            width: 250px; /* Plus grand pour matcher cube */
+            width: 250px;
             height: 250px;
             margin: 20px auto;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05); /* Fond subtil */
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
         }
         .stella-flocon-canvas {
             width: 100%;
@@ -121,99 +134,106 @@
         .tech-tag { background: rgba(0, 255, 136, 0.2); padding: 5px 10px; border-radius: 15px; }
         @media (max-width: 768px) {
             .header, .about, .skills, .projects-teaser { 
-                position: relative; max-width: 90%; margin: 10px auto; left: 0; right: 0; top: auto; bottom: auto; transform: none;
+                max-width: 90%; left: 5%; right: 5%; transform: none;
             }
-            .overlay { height: auto; }
-            .stella-card { width: 95%; left: 2.5%; transform: none; }
+            .stella-card { width: 95%; height: 90%; padding: 20px; }
             .stella-flocon-container { width: 200px; height: 200px; }
         }
     </style>
 </head>
 <body>
-    <div class="overlay">
-        <!-- Header mis à jour -->
-        <div class="header">
-            <h1>Bryan</h1>
-            <p>Développeur Full-Stack & 3D Enthusiast</p>
-        </div>
-        
-        <!-- À propos : Bio courte -->
-        <div class="about">
-            <h2>À Propos</h2>
-            <p>Passionné par le web immersif, je crée des expériences 3D interactives avec Three.js. Expérience en JS, React et backend Node. Basé en France, open to freelance.</p>
-        </div>
-        
-        <!-- Skills mis à jour -->
-        <div class="skills">
-            <h2>Skills</h2>
-            <ul>
-                <li>Python</li>
-                <li>HTML /CSS</li>
-                <li>Javascript</li>
-                <li>GitHub Pages</li>
-                <li>PostgreSQL / MYSQL</li>
-                <li>Three.js</li>
-            </ul>
-        </div>
-        
-        <!-- Teaser Projets : Appel à action -->
-        <div class="projects-teaser">
-            <h2>Projets</h2>
-            <p>Découvre mon cube interactif ci-contre – et plus sur <a href="#projects">mes works</a>.</p>
-            <p><a href="mailto:bryan@example.com">Contact</a></p>
-        </div>
-    </div>
-
-    <!-- Grosse carte pour Stella (en bas) -->
-    <div class="stella-card">
-        <div class="stella-content">
-            <h2>🌌 Stella : IA d'Analyse Stellaire Prédictive</h2>
-            <p><strong>Description :</strong> Stella est une intelligence artificielle révolutionnaire qui analyse les données astronomiques en temps réel pour prédire les événements stellaires (éclipses, supernovas potentielles, migrations planétaires). Inspirée par l'univers infini, elle transforme des téraoctets de données NASA en insights actionnables, avec une interface 3D immersive pour visualiser les constellations futures. Ce projet fictif démontre mes skills en IA, data viz et web dev – imagine un outil qui rend l'astronomie accessible à tous !</p>
+    <!-- Section Hero avec 3D cube -->
+    <section id="hero">
+        <div class="overlay">
+            <!-- Header mis à jour -->
+            <div class="header">
+                <h1>Bryan</h1>
+                <p>Développeur Full-Stack & 3D Enthusiast</p>
+            </div>
             
-            <div class="features">
-                <h3>🚀 Features Clés</h3>
+            <!-- À propos : Bio courte -->
+            <div class="about">
+                <h2>À Propos</h2>
+                <p>Passionné par le web immersif, je crée des expériences 3D interactives avec Three.js. Expérience en JS, React et backend Node. Basé en France, open to freelance.</p>
+            </div>
+            
+            <!-- Skills mis à jour -->
+            <div class="skills">
+                <h2>Skills</h2>
                 <ul>
-                    <li><strong>Prédiction Avancée :</strong> Modèles ML pour anticiper les trajectoires stellaires avec 95% de précision.</li>
-                    <li><strong>Visualisation 3D :</strong> Scènes interactives Three.js pour explorer les galaxies en VR-like.</li>
-                    <li><strong>Intégration Données :</strong> API live avec télescopes (NASA/ESA), stockées en DB scalable.</li>
-                    <li><strong>Alertes Personnalisées :</strong> Notifications push pour événements rares, via WebSockets.</li>
-                    <li><strong>Scalabilité :</strong> Déployé sur cloud, gérant 1M+ requêtes/jour.</li>
+                    <li>Python</li>
+                    <li>HTML /CSS</li>
+                    <li>Javascript</li>
+                    <li>GitHub Pages</li>
+                    <li>PostgreSQL / MYSQL</li>
+                    <li>Three.js</li>
                 </ul>
             </div>
             
-            <div class="tech-stack">
-                <h3>Tech Stack</h3>
-                <span class="tech-tag">Python (TensorFlow)</span>
-                <span class="tech-tag">Node.js / Express</span>
-                <span class="tech-tag">Three.js</span>
-                <span class="tech-tag">PostgreSQL</span>
-                <span class="tech-tag">Docker</span>
-                <span class="tech-tag">AWS</span>
+            <!-- Teaser Projets : Appel à action -->
+            <div class="projects-teaser">
+                <h2>Projets</h2>
+                <p>Scroll pour découvrir Stella – <a href="#projects">mes works</a>.</p>
+                <p><a href="mailto:bryan@example.com">Contact</a></p>
             </div>
-            
-            <p><strong>Impact :</strong> Stella pourrait révolutionner l'éducation astro et la recherche – 10k+ users fictifs en beta, avec un potentiel de collab avec SpaceX. Code source sur <a href="https://github.com/bryan/stella-ai">GitHub</a>.</p>
-            <p><a href="#demo">Démo Live</a> | <a href="#code">Voir le Code</a></p>
         </div>
         
-        <!-- Conteneur pour le flocon 3D au centre (plus grand et visible) -->
-        <div class="stella-flocon-container">
-            <canvas class="stella-flocon-canvas" id="floconCanvas"></canvas>
+        <!-- Canvas pour cube (dans hero) -->
+        <canvas id="mainCanvas"></canvas>
+    </section>
+
+    <!-- Section Projects avec carte Stella -->
+    <section id="projects">
+        <div class="stella-card">
+            <div class="stella-content">
+                <h2>🌌 Stella : IA d'Analyse Stellaire Prédictive</h2>
+                <p><strong>Description :</strong> Stella est une intelligence artificielle révolutionnaire qui analyse les données astronomiques en temps réel pour prédire les événements stellaires (éclipses, supernovas potentielles, migrations planétaires). Inspirée par l'univers infini, elle transforme des téraoctets de données NASA en insights actionnables, avec une interface 3D immersive pour visualiser les constellations futures. Ce projet fictif démontre mes skills en IA, data viz et web dev – imagine un outil qui rend l'astronomie accessible à tous !</p>
+                
+                <div class="features">
+                    <h3>🚀 Features Clés</h3>
+                    <ul>
+                        <li><strong>Prédiction Avancée :</strong> Modèles ML pour anticiper les trajectoires stellaires avec 95% de précision.</li>
+                        <li><strong>Visualisation 3D :</strong> Scènes interactives Three.js pour explorer les galaxies en VR-like.</li>
+                        <li><strong>Intégration Données :</strong> API live avec télescopes (NASA/ESA), stockées en DB scalable.</li>
+                        <li><strong>Alertes Personnalisées :</strong> Notifications push pour événements rares, via WebSockets.</li>
+                        <li><strong>Scalabilité :</strong> Déployé sur cloud, gérant 1M+ requêtes/jour.</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-stack">
+                    <h3>Tech Stack</h3>
+                    <span class="tech-tag">Python (TensorFlow)</span>
+                    <span class="tech-tag">Node.js / Express</span>
+                    <span class="tech-tag">Three.js</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">Docker</span>
+                    <span class="tech-tag">AWS</span>
+                </div>
+                
+                <p><strong>Impact :</strong> Stella pourrait révolutionner l'éducation astro et la recherche – 10k+ users fictifs en beta, avec un potentiel de collab avec SpaceX. Code source sur <a href="https://github.com/bryan/stella-ai">GitHub</a>.</p>
+                <p><a href="#demo">Démo Live</a> | <a href="#code">Voir le Code</a></p>
+            </div>
+            
+            <!-- Conteneur pour le flocon 3D -->
+            <div class="stella-flocon-container">
+                <canvas class="stella-flocon-canvas" id="floconCanvas"></canvas>
+            </div>
         </div>
-    </div>
+    </section>
 
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // Scène principale (cube, inchangée)
+        // Scène principale (cube dans hero)
+        const mainCanvas = document.getElementById('mainCanvas');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x001122);
         
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, mainCanvas.clientWidth / mainCanvas.clientHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        document.body.appendChild(renderer.domElement);
+        renderer.setSize(mainCanvas.clientWidth, mainCanvas.clientHeight);
+        mainCanvas.appendChild(renderer.domElement);
 
         // Cube
         const geometry = new THREE.BoxGeometry(2, 2, 2);
@@ -246,44 +266,46 @@
         }
         animateMain();
 
+        // Resize pour main
         window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+            const width = mainCanvas.clientWidth;
+            const height = mainCanvas.clientHeight;
+            camera.aspect = width / height;
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(width, height);
         });
 
-        // Scène pour le flocon (fixes pour visibilité et taille)
+        // Scène flocon (fixes visibilité)
         const floconCanvas = document.getElementById('floconCanvas');
         const floconScene = new THREE.Scene();
-        floconScene.background = new THREE.Color(0x00000000); // Transparent
+        floconScene.background = new THREE.Color(0x00000000);
 
         const floconCamera = new THREE.PerspectiveCamera(75, floconCanvas.clientWidth / floconCanvas.clientHeight, 0.1, 1000);
         const floconRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
         floconCanvas.appendChild(floconRenderer.domElement);
 
-        // Flocon gros comme cube (Torus plus détaillé)
-        const floconGeometry = new THREE.TorusGeometry(2, 0.6, 8, 32); // Plus grand, plus segments pour flocon
-        const floconMaterial = new THREE.MeshLambertMaterial({ color: 0x88aaff, wireframe: true }); // Bleu clair visible
+        // Flocon (solide pour visibilité, gros comme cube)
+        const floconGeometry = new THREE.TorusGeometry(2, 0.6, 8, 32);
+        const floconMaterial = new THREE.MeshLambertMaterial({ color: 0x88aaff }); // Solide bleu clair
         const flocon = new THREE.Mesh(floconGeometry, floconMaterial);
         floconScene.add(flocon);
 
-        // Lumières boostées pour flocon
-        const floconLight = new THREE.DirectionalLight(0xffffff, 2);
-        floconLight.position.set(3, 3, 3);
+        // Lumières boostées
+        const floconLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        floconLight.position.set(4, 4, 4);
         floconScene.add(floconLight);
-        const floconAmbient = new THREE.AmbientLight(0x88aaff, 0.7); // Couleur bleue pour pop
+        const floconAmbient = new THREE.AmbientLight(0x88aaff, 0.9); // Bleu fort
         floconScene.add(floconAmbient);
 
-        floconCamera.position.z = 4; // Zoom out pour voir l'ensemble
+        floconCamera.position.z = 5; // Plus loin pour voir tout
 
-        // Contrôles pour flocon
         const floconControls = new OrbitControls(floconCamera, floconRenderer.domElement);
         floconControls.enableDamping = true;
         floconControls.dampingFactor = 0.05;
         floconControls.enableZoom = false;
 
-        // Animation flocon (tourne comme roue sur Y)
+        // Animation
         function animateFlocon() {
             requestAnimationFrame(animateFlocon);
             flocon.rotation.y += 0.02;
@@ -292,18 +314,17 @@
         }
         animateFlocon();
 
-        // Resize pour flocon (fixé pour éviter clear)
+        // Resize flocon (fixé, sans if foireux)
         function resizeFlocon() {
-            const width = floconCanvas.clientWidth;
-            const height = floconCanvas.clientHeight;
-            if (floconCanvas.width !== width || floconCanvas.height !== height) {
-                floconCamera.aspect = width / height;
-                floconCamera.updateProjectionMatrix();
-                floconRenderer.setSize(width, height);
-            }
+            const width = floconCanvas.clientWidth * window.devicePixelRatio;
+            const height = floconCanvas.clientHeight * window.devicePixelRatio;
+            floconCamera.aspect = floconCanvas.clientWidth / floconCanvas.clientHeight;
+            floconCamera.updateProjectionMatrix();
+            floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
+            floconRenderer.setPixelRatio(window.devicePixelRatio);
         }
         window.addEventListener('resize', resizeFlocon);
-        resizeFlocon(); // Init
+        resizeFlocon(); // Init immédiate
     </script>
 </body>
 </html>
