@@ -72,18 +72,18 @@
             max-width: 200px;
         }
         
-        /* Nouvelle grosse carte pour Stella */
+        /* Carte Stella repositionnée en bas */
         .stella-card {
             position: absolute;
-            top: 50%;
+            bottom: 0;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-width: 800px;
-            height: 70%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 900px;
+            height: 40%; /* Plus haute pour contenu, mais en bas */
             background: rgba(0, 0, 20, 0.85); /* Bleu nuit semi-transparent */
             border: 2px solid #00ff88;
-            border-radius: 20px;
+            border-radius: 20px 20px 0 0; /* Arrondi sauf bas */
             padding: 30px;
             overflow-y: auto;
             pointer-events: auto; /* Permet interactions sur la carte */
@@ -101,16 +101,17 @@
             width: 100%;
         }
         .stella-flocon-container {
-            width: 200px;
-            height: 200px;
+            width: 250px; /* Plus grand pour matcher cube */
+            height: 250px;
             margin: 20px auto;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); /* Fond subtil */
         }
         .stella-flocon-canvas {
             width: 100%;
             height: 100%;
             border-radius: 50%;
+            display: block;
         }
         h1, h2 { margin: 0 0 10px; font-size: 1.5em; }
         ul { margin: 0; padding-left: 20px; font-size: 0.9em; text-align: left; }
@@ -123,7 +124,8 @@
                 position: relative; max-width: 90%; margin: 10px auto; left: 0; right: 0; top: auto; bottom: auto; transform: none;
             }
             .overlay { height: auto; }
-            .stella-card { width: 95%; height: 90%; top: 5%; left: 2.5%; transform: none; }
+            .stella-card { width: 95%; left: 2.5%; transform: none; }
+            .stella-flocon-container { width: 200px; height: 200px; }
         }
     </style>
 </head>
@@ -162,7 +164,7 @@
         </div>
     </div>
 
-    <!-- Grosse carte pour Stella -->
+    <!-- Grosse carte pour Stella (en bas) -->
     <div class="stella-card">
         <div class="stella-content">
             <h2>🌌 Stella : IA d'Analyse Stellaire Prédictive</h2>
@@ -193,7 +195,7 @@
             <p><a href="#demo">Démo Live</a> | <a href="#code">Voir le Code</a></p>
         </div>
         
-        <!-- Conteneur pour le flocon 3D au centre -->
+        <!-- Conteneur pour le flocon 3D au centre (plus grand et visible) -->
         <div class="stella-flocon-container">
             <canvas class="stella-flocon-canvas" id="floconCanvas"></canvas>
         </div>
@@ -250,7 +252,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Nouvelle scène pour le flocon dans la carte (isolée)
+        // Scène pour le flocon (fixes pour visibilité et taille)
         const floconCanvas = document.getElementById('floconCanvas');
         const floconScene = new THREE.Scene();
         floconScene.background = new THREE.Color(0x00000000); // Transparent
@@ -260,44 +262,48 @@
         floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
         floconCanvas.appendChild(floconRenderer.domElement);
 
-        // Flocon comme une roue (Torus pour forme roue/flocon)
-        const floconGeometry = new THREE.TorusGeometry(1, 0.3, 8, 16); // Radius 1, tube 0.3, segments pour "flocon"
-        const floconMaterial = new THREE.MeshLambertMaterial({ color: 0x88ff00, wireframe: true });
+        // Flocon gros comme cube (Torus plus détaillé)
+        const floconGeometry = new THREE.TorusGeometry(2, 0.6, 8, 32); // Plus grand, plus segments pour flocon
+        const floconMaterial = new THREE.MeshLambertMaterial({ color: 0x88aaff, wireframe: true }); // Bleu clair visible
         const flocon = new THREE.Mesh(floconGeometry, floconMaterial);
         floconScene.add(flocon);
 
-        // Lumières pour flocon
-        const floconLight = new THREE.DirectionalLight(0xffffff, 1);
-        floconLight.position.set(2, 2, 2);
+        // Lumières boostées pour flocon
+        const floconLight = new THREE.DirectionalLight(0xffffff, 2);
+        floconLight.position.set(3, 3, 3);
         floconScene.add(floconLight);
-        const floconAmbient = new THREE.AmbientLight(0x404040, 0.5);
+        const floconAmbient = new THREE.AmbientLight(0x88aaff, 0.7); // Couleur bleue pour pop
         floconScene.add(floconAmbient);
 
-        floconCamera.position.z = 3;
+        floconCamera.position.z = 4; // Zoom out pour voir l'ensemble
 
-        // Contrôles pour flocon (optionnel, petit)
+        // Contrôles pour flocon
         const floconControls = new OrbitControls(floconCamera, floconRenderer.domElement);
         floconControls.enableDamping = true;
         floconControls.dampingFactor = 0.05;
-        floconControls.enableZoom = false; // Fixé pour focus sur rotation
+        floconControls.enableZoom = false;
 
         // Animation flocon (tourne comme roue sur Y)
         function animateFlocon() {
             requestAnimationFrame(animateFlocon);
-            flocon.rotation.y += 0.02; // Rotation fluide comme une roue
+            flocon.rotation.y += 0.02;
             floconControls.update();
             floconRenderer.render(floconScene, floconCamera);
         }
         animateFlocon();
 
-        // Resize pour flocon
-        window.addEventListener('resize', () => {
+        // Resize pour flocon (fixé pour éviter clear)
+        function resizeFlocon() {
             const width = floconCanvas.clientWidth;
             const height = floconCanvas.clientHeight;
-            floconCamera.aspect = width / height;
-            floconCamera.updateProjectionMatrix();
-            floconRenderer.setSize(width, height);
-        });
+            if (floconCanvas.width !== width || floconCanvas.height !== height) {
+                floconCamera.aspect = width / height;
+                floconCamera.updateProjectionMatrix();
+                floconRenderer.setSize(width, height);
+            }
+        }
+        window.addEventListener('resize', resizeFlocon);
+        resizeFlocon(); // Init
     </script>
 </body>
 </html>
