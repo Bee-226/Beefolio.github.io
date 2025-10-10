@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio 3D - Bee-226</title>
+    <title>Portfolio 3D - Bryan</title>
     <!-- Import Map pour résoudre les modules Three.js -->
     <script type="importmap">
         {
@@ -23,14 +23,14 @@
         }
         canvas { display: block; }
         
-        /* Overlay pour le texte */
+        /* Overlay pour le texte général */
         .overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Permet les interactions 3D dessous */
+            pointer-events: none;
             z-index: 10;
         }
         .header {
@@ -65,30 +65,71 @@
             position: absolute;
             bottom: 20px;
             right: 20px;
-            background: rgba(0, 255, 0, 0.2); /* Vert tech pour matcher le cube */
+            background: rgba(0, 255, 0, 0.2);
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             max-width: 200px;
         }
+        
+        /* Nouvelle grosse carte pour Stella */
+        .stella-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 800px;
+            height: 70%;
+            background: rgba(0, 0, 20, 0.85); /* Bleu nuit semi-transparent */
+            border: 2px solid #00ff88;
+            border-radius: 20px;
+            padding: 30px;
+            overflow-y: auto;
+            pointer-events: auto; /* Permet interactions sur la carte */
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .stella-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+        }
+        .stella-flocon-container {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .stella-flocon-canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
         h1, h2 { margin: 0 0 10px; font-size: 1.5em; }
-        ul { margin: 0; padding-left: 20px; font-size: 0.9em; }
+        ul { margin: 0; padding-left: 20px; font-size: 0.9em; text-align: left; }
         a { color: #00ff00; text-decoration: none; }
+        .features { text-align: left; margin: 20px 0; }
+        .tech-stack { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; font-size: 0.8em; }
+        .tech-tag { background: rgba(0, 255, 136, 0.2); padding: 5px 10px; border-radius: 15px; }
         @media (max-width: 768px) {
             .header, .about, .skills, .projects-teaser { 
-                position: relative; /* Stack vertical sur mobile */
-                max-width: 90%;
-                margin: 10px auto;
-                left: 0; right: 0; top: auto; bottom: auto;
-                transform: none;
+                position: relative; max-width: 90%; margin: 10px auto; left: 0; right: 0; top: auto; bottom: auto; transform: none;
             }
             .overlay { height: auto; }
+            .stella-card { width: 95%; height: 90%; top: 5%; left: 2.5%; transform: none; }
         }
     </style>
 </head>
 <body>
     <div class="overlay">
-        <!-- Header : Nom et titre pro -->
+        <!-- Header mis à jour -->
         <div class="header">
             <h1>Bryan</h1>
             <p>Développeur Full-Stack & 3D Enthusiast</p>
@@ -100,7 +141,7 @@
             <p>Passionné par le web immersif, je crée des expériences 3D interactives avec Three.js. Expérience en JS, React et backend Node. Basé en France, open to freelance.</p>
         </div>
         
-        <!-- Skills : Liste tech -->
+        <!-- Skills mis à jour -->
         <div class="skills">
             <h2>Skills</h2>
             <ul>
@@ -117,7 +158,44 @@
         <div class="projects-teaser">
             <h2>Projets</h2>
             <p>Découvre mon cube interactif ci-contre – et plus sur <a href="#projects">mes works</a>.</p>
-            <p><a href="mailto:bee226@example.com">Contact</a></p>
+            <p><a href="mailto:bryan@example.com">Contact</a></p>
+        </div>
+    </div>
+
+    <!-- Grosse carte pour Stella -->
+    <div class="stella-card">
+        <div class="stella-content">
+            <h2>🌌 Stella : IA d'Analyse Stellaire Prédictive</h2>
+            <p><strong>Description :</strong> Stella est une intelligence artificielle révolutionnaire qui analyse les données astronomiques en temps réel pour prédire les événements stellaires (éclipses, supernovas potentielles, migrations planétaires). Inspirée par l'univers infini, elle transforme des téraoctets de données NASA en insights actionnables, avec une interface 3D immersive pour visualiser les constellations futures. Ce projet fictif démontre mes skills en IA, data viz et web dev – imagine un outil qui rend l'astronomie accessible à tous !</p>
+            
+            <div class="features">
+                <h3>🚀 Features Clés</h3>
+                <ul>
+                    <li><strong>Prédiction Avancée :</strong> Modèles ML pour anticiper les trajectoires stellaires avec 95% de précision.</li>
+                    <li><strong>Visualisation 3D :</strong> Scènes interactives Three.js pour explorer les galaxies en VR-like.</li>
+                    <li><strong>Intégration Données :</strong> API live avec télescopes (NASA/ESA), stockées en DB scalable.</li>
+                    <li><strong>Alertes Personnalisées :</strong> Notifications push pour événements rares, via WebSockets.</li>
+                    <li><strong>Scalabilité :</strong> Déployé sur cloud, gérant 1M+ requêtes/jour.</li>
+                </ul>
+            </div>
+            
+            <div class="tech-stack">
+                <h3>Tech Stack</h3>
+                <span class="tech-tag">Python (TensorFlow)</span>
+                <span class="tech-tag">Node.js / Express</span>
+                <span class="tech-tag">Three.js</span>
+                <span class="tech-tag">PostgreSQL</span>
+                <span class="tech-tag">Docker</span>
+                <span class="tech-tag">AWS</span>
+            </div>
+            
+            <p><strong>Impact :</strong> Stella pourrait révolutionner l'éducation astro et la recherche – 10k+ users fictifs en beta, avec un potentiel de collab avec SpaceX. Code source sur <a href="https://github.com/bryan/stella-ai">GitHub</a>.</p>
+            <p><a href="#demo">Démo Live</a> | <a href="#code">Voir le Code</a></p>
+        </div>
+        
+        <!-- Conteneur pour le flocon 3D au centre -->
+        <div class="stella-flocon-container">
+            <canvas class="stella-flocon-canvas" id="floconCanvas"></canvas>
         </div>
     </div>
 
@@ -125,9 +203,9 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // Scène basique Three.js (améliorée pro)
+        // Scène principale (cube, inchangée)
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x001122); // Bleu nuit visible
+        scene.background = new THREE.Color(0x001122);
         
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -135,44 +213,90 @@
         renderer.shadowMap.enabled = true;
         document.body.appendChild(renderer.domElement);
 
-        // Cube amélioré
+        // Cube
         const geometry = new THREE.BoxGeometry(2, 2, 2);
         const material = new THREE.MeshLambertMaterial({ color: 0x00ff88, wireframe: true });
         const cube = new THREE.Mesh(geometry, material);
         cube.castShadow = true;
         scene.add(cube);
 
-        // Lumières (boostée pour visibilité)
+        // Lumières
         const light = new THREE.DirectionalLight(0xffffff, 1.5);
         light.position.set(5, 5, 5);
         light.castShadow = true;
         scene.add(light);
 
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.8); // Plus fort
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
         scene.add(ambientLight);
 
         camera.position.z = 5;
 
-        // Contrôles Orbit
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
 
-        // Animation
-        function animate() {
-            requestAnimationFrame(animate);
+        function animateMain() {
+            requestAnimationFrame(animateMain);
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
             controls.update();
             renderer.render(scene, camera);
         }
-        animate();
+        animateMain();
 
-        // Responsive
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Nouvelle scène pour le flocon dans la carte (isolée)
+        const floconCanvas = document.getElementById('floconCanvas');
+        const floconScene = new THREE.Scene();
+        floconScene.background = new THREE.Color(0x00000000); // Transparent
+
+        const floconCamera = new THREE.PerspectiveCamera(75, floconCanvas.clientWidth / floconCanvas.clientHeight, 0.1, 1000);
+        const floconRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        floconRenderer.setSize(floconCanvas.clientWidth, floconCanvas.clientHeight);
+        floconCanvas.appendChild(floconRenderer.domElement);
+
+        // Flocon comme une roue (Torus pour forme roue/flocon)
+        const floconGeometry = new THREE.TorusGeometry(1, 0.3, 8, 16); // Radius 1, tube 0.3, segments pour "flocon"
+        const floconMaterial = new THREE.MeshLambertMaterial({ color: 0x88ff00, wireframe: true });
+        const flocon = new THREE.Mesh(floconGeometry, floconMaterial);
+        floconScene.add(flocon);
+
+        // Lumières pour flocon
+        const floconLight = new THREE.DirectionalLight(0xffffff, 1);
+        floconLight.position.set(2, 2, 2);
+        floconScene.add(floconLight);
+        const floconAmbient = new THREE.AmbientLight(0x404040, 0.5);
+        floconScene.add(floconAmbient);
+
+        floconCamera.position.z = 3;
+
+        // Contrôles pour flocon (optionnel, petit)
+        const floconControls = new OrbitControls(floconCamera, floconRenderer.domElement);
+        floconControls.enableDamping = true;
+        floconControls.dampingFactor = 0.05;
+        floconControls.enableZoom = false; // Fixé pour focus sur rotation
+
+        // Animation flocon (tourne comme roue sur Y)
+        function animateFlocon() {
+            requestAnimationFrame(animateFlocon);
+            flocon.rotation.y += 0.02; // Rotation fluide comme une roue
+            floconControls.update();
+            floconRenderer.render(floconScene, floconCamera);
+        }
+        animateFlocon();
+
+        // Resize pour flocon
+        window.addEventListener('resize', () => {
+            const width = floconCanvas.clientWidth;
+            const height = floconCanvas.clientHeight;
+            floconCamera.aspect = width / height;
+            floconCamera.updateProjectionMatrix();
+            floconRenderer.setSize(width, height);
         });
     </script>
 </body>
